@@ -1,9 +1,9 @@
 - hosts: send-dotfiles
-  remote_user: alex
+  remote_user: "{{ my_username }}"
   gather_facts: False
   tasks:
   - name: copy my dotfiles
-    copy: src="../private/dotfiles/{{ item }}" dest="~alex/.{{ item }}"
+    copy: src="../private/dotfiles/{{ item }}" dest="~{{ my_username }}/.{{ item }}"
     with_items:
     - vimrc
     - bashrc
