@@ -1,10 +1,5 @@
-
-
 - hosts: linux-root
   gather_facts: False
-  vars:
-  - banner_location: /etc/ssh.banner
-  - banner_file: ../private/etc/banner
   tasks:
   - name: "Copy Banner"
     copy: src="{{ banner_file }}" dest="{{ banner_location }}" mode=0655
