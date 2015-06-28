@@ -1,0 +1,17 @@
+
+
+- hosts: linux-root
+  gather_facts: False
+  vars:
+  - banner_location: /etc/ssh.banner
+  - banner_file: ../private/etc/banner
+  tasks:
+  - name: "Copy Banner"
+    copy: src="{{ banner_file }}" dest="{{ banner_location }}" mode=0655
+  - name: "Configure Banner"
+    lineinfile: dest=/etc/ssh/sshd_config regexp='^Banner.*' line="Banner {{ banner_location }}" state=present
+    notify: restart ssh
+
+  handlers:
+  - name: restart ssh
+    service: name=sshd state=restarted enabled=yes

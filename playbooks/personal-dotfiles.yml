@@ -1,0 +1,11 @@
+- hosts: send-dotfiles
+  remote_user: alex
+  gather_facts: False
+  tasks:
+  - name: copy my dotfiles
+    copy: src="../private/dotfiles/{{ item }}" dest="~alex/.{{ item }}"
+    with_items:
+    - vimrc
+    - bashrc
+    - bash_profile
+    - screenrc

@@ -1,0 +1,21 @@
+# Add my username, run sudo
+- hosts: linux-root
+  vars_files:
+  - private-vars.yml
+  tasks:
+  - name: add sudo group
+    group: name=sudo state=present
+  - name: add my user
+    user: name="{{ my_username }}" shell=/bin/bash groups=sudo append=yes
+  - name: add my ssh_keys
+    authorized_key: user="{{ my_username }}" key="{{ lookup('file', item) }}" state="present"
+    with_fileglob:
+    - ../private/keys/ssh/{{ my_username }}@*
+  - stat: path=/etc/sudoers.d/sudo-group
+    register: sudo_file
+
+- hosts: linux-root
+  vars_files:
+  - private-vars.yml
+  roles:
+    - { role: knopki.ansible-sudoers, when: sudo_file.stat.exists == False }

@@ -1,0 +1,25 @@
+- hosts: linux-root
+  tasks:
+  - name: Install required software (Debian)
+    action: apt name="{{ item }}" state=present
+    with_items:
+    - unzip
+    - screen
+    - vim
+    - atop
+    - sudo
+    - nmap
+    - iperf
+    when: ansible_os_family == "Debian"
+
+  - name: Install required software (CentOS)
+    action: yum name="{{ item }}" state=present
+    with_items:
+    - unzip
+    - screen
+    - vim
+    - atop
+    - sudo
+    - nmap
+    - iperf
+    when: ansible_distribution == "CentOS"

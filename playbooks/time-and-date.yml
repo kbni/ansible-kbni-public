@@ -1,0 +1,20 @@
+# Hey, it's Brisbane time~
+# This isn't actually used anymore
+
+- hosts: all
+  tasks:
+    - name: Set timezone variable
+      copy: content='Australia/Brisbane'
+            dest=/etc/timezone
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+      notify: update timezone
+
+  handlers:
+    - name: update timezone
+      command: dpkg-reconfigure --frontend noninteractive tzdata
+
+  roles:
+  - role: resmo.ansible-role-ntp

@@ -1,0 +1,6 @@
+[submodule "roles/knopki.ansible-sudoers"]
+	path = roles/knopki.ansible-sudoers
+	url = https://github.com/knopki/ansible-sudoers
+[submodule "roles/kbni.nginx-php5"]
+	path = roles/kbni.nginx-php5
+	url = git@github.com:kbni/ansible-role-nginx-php5.git
