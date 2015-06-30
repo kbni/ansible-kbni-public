@@ -1,5 +1,5 @@
-- hosts: linux-root
+- hosts: update-hosts
   tasks:
   - name: "Build hosts file"
     lineinfile: dest=/etc/hosts regexp='.*{{ item.name }}$' line="{{ item.ip }} {{ item.name }} {{ item.short }}" state=present
-    with_items: {{ host_files }}
+    with_items: "{{ hosts_file }}"
