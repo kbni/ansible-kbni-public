@@ -2,3 +2,7 @@
 - hosts: webserver
   roles:
   - kbni.nginx-php5
+
+- hosts: confluence
+  roles:
+      - { role: 'kbni.nginx-php5', sites: [{ domain_name: 'co.kbni.net', username: 'www-confluence', uid: 81001, proxy_pass: 'http://127.0.0.1:8090' }] }

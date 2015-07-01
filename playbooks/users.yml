@@ -11,6 +11,10 @@
     - ../private/keys/ssh/{{ my_username }}@*
   - stat: path=/etc/sudoers.d/sudo-group
     register: sudo_file
+  - name: prtg authorized key
+    authorized_key: user=root key="{{ lookup('file', '../private/keys/prtg/prtg.pub') }}" state="present"
+  - name: ansible authorized key
+    authorized_key: user=root key="{{ lookup('file', '../private/keys/ansible/ansible.pub') }}" state="present"
 
 - hosts: linux-root
   roles:
