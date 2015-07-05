@@ -3,9 +3,20 @@
   gather_facts: True
   tasks:
   - name: copy my dotfiles
-    copy: src="../private/dotfiles/{{ item }}" dest=".{{ item }}"
+    copy: src="../private/dotfiles/{{ item }}" dest="/home/{{ my_username }}/{{ item }}"
     with_items:
     - vimrc
     - bashrc
     - bash_profile
     - screenrc
+    when: ansible_distribution != 'MacOSX'
+    
+  tasks:
+  - name: copy my dotfiles
+    copy: src="../private/dotfiles/{{ item }}" dest="/Users/{{ my_username }}/.{{ item }}"
+    with_items:
+    - vimrc
+    - bashrc
+    - bash_profile
+    - screenrc
+    when: ansible_distribution == 'MacOSX'

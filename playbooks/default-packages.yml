@@ -10,6 +10,7 @@
     - sudo
     - nmap
     - iperf
+    - snmp-mibs-downloader
     when: ansible_os_family == "Debian"
 
   - name: Install required software (CentOS)

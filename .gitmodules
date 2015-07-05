@@ -4,3 +4,9 @@
 [submodule "roles/kbni.nginx-php5"]
 	path = roles/kbni.nginx-php5
 	url = git@github.com:kbni/ansible-role-nginx-php5.git
+[submodule "roles/oefenweb.ansible-snmpd"]
+	path = roles/oefenweb.ansible-snmpd
+	url = https://github.com/Oefenweb/ansible-snmpd.git
+[submodule "roles/resmo.ansible-ntpd"]
+	path = roles/resmo.ansible-ntpd
+	url = https://github.com/resmo/ansible-role-ntp
