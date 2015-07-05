@@ -10,3 +10,6 @@
 [submodule "roles/resmo.ansible-ntpd"]
 	path = roles/resmo.ansible-ntpd
 	url = https://github.com/resmo/ansible-role-ntp
+[submodule "roles/kbni.firewall"]
+	path = roles/kbni.firewall
+	url = git@github.com:kbni/ansible-role-firewall.git

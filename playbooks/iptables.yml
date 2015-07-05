@@ -1,23 +1,19 @@
-- hosts: all
-  vars:
-      hamachi_hosts: "cat /etc/hosts | grep '^25.' | cut -d' ' -f1"
-      hamachi_aws_hosts: "cat /etc/hosts | grep -E '^25.+aws' | cut -d' ' -f1"
-
 - hosts: firewall-lan-server
   vars:
       firewall_log_drops: false
       firewall_drop_incoming: true
       firewall_rules:
       - { proto: 'icmp', comment: 'Allow icmp traffic' }
-      - { dev_in: 'ham0', stdout_hosts: '{{ hamachi_hosts }}', dport: 22, proto: 'tcp', comment: 'ssh access for hamachi peers' }
-      - { dev_in: 'ham0', stdout_hosts: '{{ hamachi_aws_hosts }}', loop_dports: '10161:10622 161:162', proto: 'udp', comment: 'snmpd access for hamachi peers' }
-      - { dev_in: 'ham0', stdout_hosts: '{{ hamachi_hosts }}', proto: 'tcp', loop_dports: '80 443', comment: 'web access for hamachi peers hamachi' }
-      - { dev_in: 'ham0', stdout_hosts: '{{ hamachi_hosts }}', proto: 'tcp', loop_dports: '88 139 445', comment: 'samba (cifs) for hamachi peers' }
+      - { dev_in: 'ham0', dport: 22, proto: 'tcp', comment: 'ssh access for hamachi peers' }
+      - { dev_in: 'ham0', loop_dports: '10161:10622 161:162', proto: 'udp', comment: 'snmpd access for hamachi peers' }
+      - { dev_in: 'ham0', proto: 'tcp', loop_dports: '80 443', comment: 'web access for hamachi peers hamachi' }
+      - { dev_in: 'ham0', proto: 'tcp', loop_dports: '88 139 445', comment: 'samba (cifs) for hamachi peers' }
       - { dport: '10000:65000', proto: 'udp', comment: 'misc ports for udp (necessary for hamachi)' }
       - { loop_dports: '80 443', proto: 'tcp', comment: 'web access (http and https) wide open' }
       - { loop_protos: 'tcp udp', dport: 53, source: '10.0.0.0/8', comment: 'DNS access' }
       - { dport: 22, proto: 'tcp', comment: 'ssh access for all hosts' }
       - { dport: 67, proto: 'udp', comment: 'dhcp'}
+      - { dport: 53, loop_protos: 'udp tcp', comment: 'dns' }
       - { chain: 'OUTPUT', comment: 'allow any other outgoing traffic' }
   roles:
       - kbni.firewall
@@ -25,16 +21,15 @@
 - hosts: firewall-webserver
   vars:
       firewall_log_drops: true
+      firewall_drop_incoming: true
       firewall_rules:
-      - { dev_in: 'ham0', dport: 22, proto: 'tcp' }              # allow hamachi access to ssh
-      - { dev_in: 'ham0', dport: 80, proto: 'tcp' }              # allow hamachi access to http
-      - { dev_in: 'ham0', dport: 443, proto: 'tcp' }             # allow hamachi access to https
-      - { dev_in: 'ham0', dport: '161:162', proto: 'udp' }       # allow hamachi access to snmpd
-      - { dev_in: 'ham0', dport: '10161:10622', proto: 'udp' }   # allow hamachi access to snmpd/secure
-      - { dport: '10000:65000', proto: 'udp' }                   # allow reasonable incoming UDP (necessary for hamachi, etc)
-      - { dport: 443, proto: 'tcp' }                             # allow any system to SSH here
-      - { dport: 80, proto: 'tcp' }                              # allow any system to SSH here
-      - { dport: 22, proto: 'tcp' }                              # allow any system to SSH here
+      - { proto: 'icmp', comment: 'Allow icmp traffic' }
+      - { dev_in: 'ham0', dport: 22, proto: 'tcp', comment: 'ssh access for hamachi peers' }
+      - { dev_in: 'ham0', proto: 'tcp', loop_dports: '80 443', comment: 'web access for hamachi peers hamachi' }
+      - { dev_in: 'ham0', loop_dports: '10161:10622 161:162', proto: 'udp', comment: 'snmpd access for hamachi peers' }
+      - { dport: '10000:65000', proto: 'udp', comment: 'misc ports for udp (necessary for hamachi)' }
+      - { loop_dports: '80 443', proto: 'tcp', comment: 'web access (http and https) wide open' }
+      - { dport: 22, proto: 'tcp', comment: 'ssh access for all hosts' }
       - { proto: 'icmp', comment: 'Allow icmp traffic' }
       - { chain: 'OUTPUT' }                                      # allow outgoing traffic
   roles:
